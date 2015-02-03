@@ -1,0 +1,392 @@
+# Create your views here.
+
+from django.shortcuts import render_to_response, get_object_or_404, render,redirect
+from django.http import HttpResponse
+from django.template import RequestContext
+from social.models import *
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
+
+def mylogin(request):
+    cxt = {
+        
+    }
+    return render_to_response('social/login.html', cxt, context_instance=RequestContext(request))
+
+
+def log_out(request):
+    logout(request)
+    cxt = {
+        
+    }
+    return render_to_response('social/login.html', cxt, context_instance=RequestContext(request))
+
+
+def mysignup(request):
+    cxt = {
+        
+    }
+    return render_to_response('social/signup.html', cxt, context_instance=RequestContext(request))
+
+
+def log_in(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                request.session["username"] = username
+                request.session["loggedinuser"] = request.user
+                return  redirect('social.views.main', username)
+            else:
+                return HttpResponse("Your account is disabled.")
+        else:
+            return render(request, 'social/login.html', {'invalid': 1})
+    else:
+        return render(request, 'social/login.html', {})
+
+
+def sign_up(request):
+    empty={}
+    if request.method == 'POST':
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        email = request.POST.get('email')
+        age = request.POST.get('age')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        cpassword = request.POST.get('cpassword')
+        empty = {
+            'fname' : fname,
+            'lname' : lname,
+            'email' : email,
+            'age' : age,
+            'username' : username,
+            'password' : password,
+            'cpassword' : cpassword,
+        }
+        already_exists = 1
+        wrong_pass = 1
+        if all((fname, lname, email, age, username, password, cpassword)):
+            
+            if UserProfile.objects.filter(user__username__exact=username).count() > 0:
+                already_exists = 0
+                existing_user = {'existinguser': already_exists, 'empty': empty, }
+                return render(request, 'social/signup.html', existing_user)
+            
+            if cpassword != password:
+	            wrong_pass = 0
+	            dif_password = {'wrong_pass': wrong_pass, 'empty': empty, }
+	            return render(request, 'social/signup.html', dif_password)
+	            
+            newUserProfile = UserProfile()
+            user = User()
+            user.username = username
+            user.first_name = fname
+            user.last_name = lname
+            user.email = email
+            #user.password = password
+            user.set_password(password) 
+            user.save()
+            newUserProfile.user = user
+            newUserProfile.age = age
+            newUserProfile.save()
+            
+            request.session["username"] = username
+            request.session["password"] = password
+            return render(request, 'social/userdata.html', {'username': request.session["username"],})
+    cxt = {
+        'empty': empty   
+    } 
+    return render(request, 'social/signup.html', cxt)
+ 
+
+def user_data(request):
+    empty={}
+    if request.method == 'POST':
+        gender = request.POST.get('gender')
+        qualification = request.POST.get('qualification')
+        mobile = request.POST.get('mobile')
+        zipcode = request.POST.get('zipcode')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        country = request.POST.get('country')
+        about = request.POST.get('about')
+        mstatus = request.POST.get('mstatus')
+        u_image = request.POST.get('uimage')
+        empty = { 
+            'gender' : gender, 
+            'mstatus' : mstatus, 
+            'qualification' : qualification, 
+            'mobile' : mobile, 
+            'zipcode' : zipcode,
+            'city' : city, 
+            'state' : state, 
+            'country' : country, 
+            'about' : about, 
+        }
+        if all((gender, mstatus)):
+            username = request.session["username"]
+            password = request.session["password"]
+            newUserInformation = UserInformation()
+            nup = UserProfile.objects.get(user__username__exact=username)
+            newUserInformation.username = nup
+            newUserInformation.gender = gender
+            newUserInformation.qulification = qualification
+            newUserInformation.mobile = mobile
+            newUserInformation.zip_code = zipcode
+            newUserInformation.city = city
+            newUserInformation.state = state
+            newUserInformation.country = country
+            newUserInformation.about = about
+            newUserInformation.marital_status = mstatus
+            #f = SimpleUploadedFile(content=u.read(), content_type='image/jpeg', name= 'add',)
+            if u_image==None:
+                newUserInformation.image = request.FILES['uimage']
+            newUserInformation.save()
+            
+            user = authenticate(username=username, password=password)
+            if user:
+                if user.is_active:
+                    login(request, user)
+                    request.session["username"] = username
+                    request.session["loggedinuser"] = request.user
+                    return  redirect('social.views.main', username)
+                else:
+                    return HttpResponse("Your account is disabled.")
+            else:
+                pass
+    cxt = {
+        'empty': empty   
+    } 
+    return render_to_response('social/userdata.html', cxt, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/social/')
+def about(request, username):
+    user_to_be_view = UserInformation.objects.get(username__user__username__exact=username)
+    if unicode(request.user) != username:
+	    viewed = Viewed()
+	    viewed.who = UserProfile.objects.get(user__username__exact=request.user)
+	    viewed.whose = UserProfile.objects.get(user__username__exact=username)
+	    viewed.save()
+	    
+    cxt = {
+        'user_to_be_view': user_to_be_view,
+        'username': username,
+    }
+    return cxt
+
+
+@login_required(login_url='/social/')
+def friend(request, username):
+    list_of_friends = []
+    friends = Friendship.objects.filter(Q(friend1__user__username__exact=username) | Q(friend2__user__username__exact=username))
+    for i in friends:
+        if i.friend1.user.username==username:
+            list_of_friends.append(i.friend2)
+        elif i.friend2.user.username==username:
+            list_of_friends.append(i.friend1)
+        else:
+            pass 
+    cxt = {
+        'list_of_friends': list_of_friends,
+        'username': username,
+    }
+    return cxt
+
+
+@login_required(login_url='/social/')
+def who_has_viewed(request, username):
+    if unicode(request.user) == username:
+        who_has_viewed = Viewed.objects.filter(whose__user__username__exact=unicode(request.user)).order_by('-datetime')[:10]
+        cxt = {
+            'who_has_viewed': who_has_viewed,
+        }
+    else:
+        cxt = {}
+    return cxt
+
+
+@login_required(login_url='/social/')
+def viewed_by_you(request, username):
+    if unicode(request.user) == username:
+        viewed_by_you = Viewed.objects.filter(who__user__username__exact=unicode(request.user)).order_by('-datetime')[:10]
+        cxt = {
+            'viewed_by_you': viewed_by_you,
+        }
+    else:
+        cxt ={}
+    return cxt
+
+
+def main(request, username):
+    if unicode(request.user) == username:
+        a = about(request, username)
+        b = who_has_viewed(request, username)
+        c = viewed_by_you(request, username)
+        d = friend(request, username)
+        cxt = dict(a.items() + b.items() + c.items() + d.items())   
+    else:
+        a = about(request, username)
+        b = friend(request, username)
+        cxt = dict(a.items() + b.items())
+    return render_to_response('social/main.html', cxt, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/social/')
+def search(request):
+    cxt = {}
+    if request.method == 'POST':
+        search_key = request.POST.get('search_key')
+        search_results = UserProfile.objects.filter(
+            Q(user__first_name__icontains=search_key) |Q(user__last_name__icontains=search_key) |
+            Q(user__username__icontains=search_key) | Q(user__email__icontains=search_key) | 
+            Q(age__icontains=search_key)).exclude(user__username__exact=request.user)
+        
+        list_of_friends = []
+        friends = Friendship.objects.filter(Q(friend1__user__username__exact=unicode(request.user)) | 
+            Q(friend2__user__username__exact=unicode(request.user)))
+        for i in friends:
+            if i.friend1.user.username==unicode(request.user):
+                list_of_friends.append(i.friend2.user.username)
+            elif i.friend2.user.username==unicode(request.user):
+                list_of_friends.append(i.friend1.user.username)
+            else:
+                pass 
+                                
+        cxt = {
+            'results': search_results,
+            'list_of_friends': list_of_friends,
+        }
+    return render_to_response('social/search.html', cxt, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/social/')
+def add_friend(request, username):
+    newFriendship = Friendship()
+    newFriendship.friend1 = UserProfile.objects.get(user__username__exact=unicode(request.user))
+    newFriendship.friend2 = UserProfile.objects.get(user__username__exact=username)
+    newFriendship.save()
+    return  redirect('social.views.main', request.user)
+
+
+@login_required(login_url='/social/')
+def remove_friend(request, username):
+    if unicode(request.user) != username:
+        Friendship.objects.filter(
+            (Q(friend1__user__username__exact=unicode(request.user)) & Q(friend2__user__username__exact=username)) | 
+            (Q(friend1__user__username__exact=unicode(request.user)) & Q(friend2__user__username__exact=username))
+        ).delete()
+        
+    return  redirect('social.views.main', request.user)
+    
+
+def forgot_password(request):
+    empty = {}
+    if request.method == "POST":
+        username = request.POST.get('u_name')
+        u_password = request.POST.get('u_password')
+        c_password = request.POST.get('c_password')
+        empty = {
+            'u_name': username,
+            'u_password': u_password,
+            'c_password': c_password,
+        }
+        not_exist = 0
+        wrong_pass = 0
+        if all((username, u_password, c_password)):
+            if u_password != c_password:
+                wrong_pass = 1
+                dif_password = {'wrong_pass': wrong_pass, 'empty': empty, }   
+                return render_to_response('social/forgot.html', dif_password, context_instance=RequestContext(request))
+                
+            if UserProfile.objects.filter(user__username__exact=username).count() > 0:
+                user = User.objects.get(username__exact=username)
+                user.set_password(c_password)
+                user.save()
+                not_exist = 1
+                return redirect('social.views.mylogin')
+            cxt = {
+                'empty': empty,
+                'not_user': not_exist,
+            }
+            return render_to_response('social/forgot.html', cxt, context_instance=RequestContext(request))
+        
+    cxt = {
+        'empty': empty,
+        
+    }
+    return render_to_response('social/forgot.html', cxt, context_instance=RequestContext(request))
+   
+
+@login_required(login_url='/social/')
+def user_edit(request):
+    if request.method == "POST":
+        gender = request.POST.get('gender')
+        qualification = request.POST.get('qualification')
+        mobile = request.POST.get('mobile')
+        zipcode = request.POST.get('zipcode')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        country = request.POST.get('country')
+        about = request.POST.get('about')
+        mstatus = request.POST.get('mstatus')
+        u_image = request.POST.get('uimage')
+        empty = { 'username' : request.user, 
+            'gender' : gender, 
+            'mstatus' : mstatus, 
+            'qualification' : qualification, 
+            'mobile' : mobile, 
+            'zipcode' : zipcode,
+            'city' : city, 
+            'state' : state, 
+            'country' : country, 
+            'about' : about, 
+        }
+        print empty
+        if all((gender, mstatus)):
+            user_information = UserInformation.objects.get(username__user__username__exact=request.user)
+            user_information.gender = gender
+            user_information.qulification = qualification
+            user_information.mobile = mobile
+            user_information.zip_code = zipcode
+            user_information.city = city
+            user_information.state = state
+            user_information.country = country
+            user_information.about = about
+            user_information.marital_status = mstatus
+            if u_image==None:
+                user_information.image = request.FILES['uimage']
+            user_information.save()
+            return  redirect('social.views.main', request.user)
+    else:
+        user_info = UserInformation.objects.get(username__user__username__exact=request.user)
+        empty = {
+            'gender': user_info.gender,
+            'qulification': user_info.qulification,
+            'mobile': user_info.mobile,
+            'zipcode': user_info.zip_code,
+            'city': user_info.city,
+            'state': user_info.state,
+            'country': user_info.country,
+            'about': user_info.about,
+            'mstatus': user_info.marital_status,
+            'uimage': user_info.image,
+        }  
+        cxt = {'empty' : empty,}
+        print empty
+        return render_to_response('social/userdata.html', cxt, context_instance=RequestContext(request))
+        
+        
+      
+                    
+        
+    
+
+

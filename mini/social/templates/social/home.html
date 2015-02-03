@@ -1,0 +1,103 @@
+
+
+
+
+{% block head %}  
+  
+{% load staticfiles %}
+  <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+{% endblock %}
+
+{% block left_content %}
+	
+  <div id="searchbox">
+    <a href="/social/log-out/" >Log out</a>
+    {% if request.session.username == username %}
+      <span> <a href="/social/edit/" > Edit </a> </span>
+    {% endif %}
+    <form method="post" action="/social/search/" >
+      <input type="text" name="search_key" placeholder=" Search by name, user_id, email and age " size="40" />
+      <div id="sb"><input type="image" src="/static/css/s.png" border="0" alt="Submit" width=45px height=40px /> </div>
+  </div>
+
+     
+{% endblock %}
+
+{% block right_content %}
+  
+  <div style="height: ; width: 800px; border: 2px solid; border-radius: 35px; box-shadow: 15px 15px 10px #888888; margin-top: 30px; 
+  margin-left: 100px;">
+  <h2><a href="/social/main/{{ request.session.username }}/"> {{ request.session.username }} </a></h2>
+    <h1 align="center"> User profile </h1> <hr/>
+
+    <table cellpadding="10px" style="color: black ; float: left;">
+        <tr>
+	  <td> Name: </td>
+	  <td> {{user_to_be_view.username.user.first_name}} &nbsp;&nbsp; {{user_to_be_view.username.user.last_name}}  </td>
+        </tr> 
+	<tr>
+	  <td> Highest qualification: </td>
+	  <td> {{user_to_be_view.qulification}} </td>
+	</tr>
+	<tr>
+	  <td> Age: </td>
+	  <td> {{user_to_be_view.username.age}} </td>
+	</tr>
+	<tr>
+	  <td> Gender: </td>
+	  <td> {{user_to_be_view.gender}}</td>
+	</tr>
+	<tr>
+	  <td> Marital status: </td>
+	  <td> {{user_to_be_view.marital_status}} </td>
+	</tr>
+    </table>
+
+    <table style="border 2px solid black; color: black ; float: right;">
+	<tr> <td> <img src="/static/user_image/{{user_to_be_view.username.user.username}}.JPG" width="180" height="160"/> </td> </tr>
+    </table>
+
+    <table align="center" cellpadding="10px" style="color: black ; margin-top: 220px;">
+	<tr>
+	  <td> User ID: </td>
+	  <td> {{user_to_be_view.username.user.username}} </td>
+	</tr>
+	<tr>
+	  <td> Email ID: </td>
+	  <td> {{user_to_be_view.username.user.email}}</td>
+	</tr>
+	<tr>
+	  <td> Mobile Number: </td>
+	  <td> {{user_to_be_view.mobile}} </td>
+	</tr>
+	<tr>
+	  <td> Zip Code: </td>
+	  <td> {{user_to_be_view.zip_code}}</td>
+	</tr>
+	<tr>
+	  <td> City: </td>
+	  <td> {{user_to_be_view.city}} </td>
+	</tr>
+	<tr>
+	  <td> State: </td>
+	  <td> {{user_to_be_view.state}} </td>
+	</tr>
+	<tr>
+	  <td> Country: </td>
+	  <td> {{user_to_be_view.country}} </td>
+	</tr>
+	<tr>
+	  <td> About: </td>
+	  <td> {{user_to_be_view.about}} </td>
+	</tr>
+    </table>
+  </div>
+
+  <div style="height:50px;">
+
+  </div>
+{% endblock %}
+
+
+
+	

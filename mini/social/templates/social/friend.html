@@ -1,0 +1,40 @@
+
+
+
+
+{% block head %}  
+
+{% endblock %}
+
+{% block right_content %}
+  
+  <div style="height: ; width: 800px; border: 2px solid; border-radius: 35px; box-shadow: 15px 15px 10px #888888; margin-top: 0px; 
+  margin-left: 100px;">
+ 
+    <h1 align="center"> Friends </h1> <hr/>
+    
+    <table align="center">
+ 
+      {% for friend in list_of_friends %}
+      
+        <tr>
+            <td> <img src="/static/user_image/{{friend.user.username}}.JPG" width="60" height="60"/> </td>
+            <td> <a href="/social/main/{{friend.user.username}}/" > 
+                {{ friend.user.first_name }} &nbsp; {{ friend.user.last_name }} </a> </td>
+            <td> {{ friend.age }} </td>
+            <td> 
+                {% if request.session.username == username %}
+                    <span> <a href="/social/remove-friend/{{friend.user.username}}/" > [X] </a> </span>
+                {% endif %}
+            </td>
+        </tr>
+      
+      {% endfor %}
+    </table>
+    {{list_of_friends}}
+  </div>
+  <div style="height:50px;">
+
+  </div>
+{% endblock %}
+

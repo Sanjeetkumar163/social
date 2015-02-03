@@ -1,0 +1,41 @@
+
+{% load staticfiles %}
+
+<html>
+<head>
+    <title>{% block title %}Mini Social{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    {% block head %}  {% endblock %}	
+
+</head>
+<body>
+
+<div>
+    <div id="header">		
+	<img src="{% static 'image/logo.png' %}" />
+    </div> <!--end of header -->
+
+    <div id="content">
+	<div id="left">
+	  {% block left_content %}
+
+	  {% endblock %}
+	</div>
+	<div id="right">	
+	{% block right_content %}
+
+  	{% endblock %}	
+	</div>
+
+    </div> <!--end of content -->
+    <hr/>
+
+    <div id="footer">
+	<hr />       
+    </div> <!--end of footer -->		
+
+</div> 
+   
+</body>
+</html>

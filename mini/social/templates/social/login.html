@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Login {% endblock %}
+
+{% block head %}
+  <style>
+    #lp { color: green; font-size: 14px; text-align: center; }
+  </style>
+{% endblock %}
+
+{% block left_content %}
+    <img src="/static/image/url.jpg" width=600 height=500/> 
+{% endblock %}
+
+{% block right_content %}
+  <div >
+
+    <form method="post" action="/social/log-in/" >
+      {% csrf_token %}
+
+      <table style="padding: 0px 0px 0px 650px; margin-top: -460px; font-size:13px; color: red;">
+        <tr>
+	  <td> User ID: </td>
+	  <td> Password: </td>
+	</tr>
+
+        <tr>
+	  <td> <input type="text" name="username" value="" /> </td>
+	  <td> <input type="password" name="password" value="" /> </td>
+	  <td> <input type="submit" value=" Log In " /> </td>
+	</tr>
+
+	<tr>
+	  <td colspan="3" id="lp"> 
+	      {% if invalid %}
+    		<lable> Either User ID or Password is incorrect </lable>
+  	      {% endif %}
+	  </td>
+	</tr>
+      </table>
+      
+    </form>
+
+    <table style="padding: 0px 0px 0px 650px;">
+      <tr>
+        <td> <a href="/social/forgot-password/">  <img src="/static/image/forgotpassword.gif" width=200 height=180 /> </a></td>
+   
+    	<td> <a href="/social/signup/" > <img src="/static/image/signup.jpg" width=220 height=200 /> </a> </td>
+      </tr>
+    </table>
+
+  </div>
+{% endblock %}
+
+

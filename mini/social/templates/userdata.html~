@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Personal information {% endblock %}
+
+{% block left_content %}
+    <img src="/static/image/url.jpg" width=500 height=500/> 
+{% endblock %}
+
+{% block right_content %}
+  <div style="padding: 0px 0px 0px 650px; margin-top: -460px;">
+    <h1 style="font-size: 40px;"> Personal Information </h1> 
+
+    <form action="/friend/user-data/" method="post">
+      {% csrf_token %}
+
+      <table>
+	<tr>
+	  <td> User ID: </td>
+	  <td> <input type="text" name="userid" placeholder="Enter your User ID" /> </td>
+	</tr>
+
+	<tr>
+	  <td> Gender: </td>
+	  <td> <input type="radio" name="gender" value="male" /> Male &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	   <input type="radio" name="gender" value="female" /> Female </td>
+	</tr>
+
+	<tr>
+	  <td> Highest qualification: </td>
+	  <td> <input type="text" name="qualification" /> </td>
+	</tr>
+
+	<tr>
+	  <td> Mobile Number: </td>
+	  <td> <input type="number" name="mobile"/></td>
+	</tr>
+
+	<tr>
+	  <td> Zip Code: </td>
+	  <td> <input type="number" name="zipcode"/></td>
+	</tr>
+
+	<tr>
+	  <td> City: </td>
+	  <td> <input type="text" name="city" /> </td>
+	</tr>
+
+	<tr>
+	  <td> State: </td>
+	  <td> <input type="text" name="state" /> </td>
+	</tr>
+
+	<tr>
+	  <td> Country: </td>
+	  <td> <input type="text" name="country" /> </td>
+	</tr>
+
+	<tr>
+	  <td> Hobbies: </td>
+	  <td> <input type="text" name="hobbies" placeholder="Seprated by comma(,)" /> </td>
+	</tr>
+
+	<tr>
+	  <td> Favorit Color: </td>
+	  <td> <input type="text" name="fcolor" placeholder="Seprated by comma(,)" /> </td>
+	</tr>
+
+	<tr>
+	  <td> About yourself: </td>
+	  <td> <textarea name="about" rows="10" cols="50"></textarea> </td>
+	</tr>
+
+	<tr>
+	  <td> Marital status: </td>
+	  <td> <input type="radio" name="mstatus" value="married" /> Married &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	   <input type="radio" name="mstatus" value="unmarried" /> Unmarried </td>
+	</tr>
+	
+	<tr>
+	  <td> Upload Image: </td>
+	  <td> <input type="file" name="image" /></textarea> </td>
+	</tr>
+	
+	<tr>
+	  <td>  </td>
+	  <td> <input type="image" src="submit.png" border="0" alt="Submit" width=190 height=50px /> </td>
+	</tr>
+
+      </table>
+
+    </form>
+
+  </div>
+{% endblock %}
+
+

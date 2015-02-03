@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Search Results {% endblock %}
+
+{% block head %}  
+
+{% endblock %}
+
+{% block right_content %}
+  
+  <div style="height: ; width: 800px; border: 2px solid; border-radius: 35px; box-shadow: 15px 15px 10px #888888; margin-top: 0px; 
+  margin-left: 100px;">
+    <h2><a href="/social/main/{{ request.session.username }}/"> {{ request.session.username }} </a></h2>
+    <h1 align="center"> Search Results </h1> <hr/>
+    
+    <table align="center">       
+       {% for userProfile in results.all %}
+      
+        <tr>
+            <td> <img src="/static/user_image/{{userProfile.user.username}}.JPG" width="60" height="60"/> </td>
+            <td> <a href="/social/main/{{userProfile.user.username}}/" > 
+                {{ userProfile.user.first_name }} &nbsp; {{ userProfile.user.last_name }} </a> </td>
+            <td> {{ userProfile.age }} </td>
+            <td> 
+                {% if userProfile.user.username in list_of_friends %}
+                    <span> Friend </span>
+                {% else %}
+                    <span> <a href="/social/add-friend/{{userProfile.user.username}}/"> Add friend </a> </span>
+                {% endif %}
+            </td>
+        </tr>
+      
+      {% endfor %}
+    </table>
+    {{list_of_friends}}
+  </div>
+  <div style="height:50px;">
+
+  </div>
+{% endblock %}
+

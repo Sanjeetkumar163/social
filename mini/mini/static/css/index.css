@@ -1,0 +1,49 @@
+
+body {
+	margin: 0px;
+	padding: 0px;
+	color: #c2bead;
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 12px;
+	line-height: 1.5em; 
+	background-color: white;
+	background-image: url(back1.jpg);
+	background-repeat: repeat-x;
+	background-position: center;
+}
+
+
+#header {
+
+	margin: 5px 3px 0px 0px;
+	padding:0px;
+	background-image: url(head.png);
+	background-repeat: repeat-x;
+}
+
+#header > img {
+	margin: 0px;
+	padding: 20px 0px 20px 170px;
+	height: 56px;	
+}
+
+#content {
+
+	padding: 0px 0px 0px 170px;
+	background-repeat: repeat-x;
+	height: 100%;
+	
+}
+
+#left > img {
+
+
+}
+
+#footer {
+	clear: both;
+	width: 990px;
+	padding: 0px 0px 0px 170px;
+	text-align: center;
+	height: 10px;
+}

@@ -1,0 +1,28 @@
+
+
+{% block right_content %}
+  
+  <div style="height: ; width: 800px; border: 2px solid; border-radius: 35px; box-shadow: 15px 15px 10px #888888; margin-top: 0px; 
+  margin-left: 100px;">
+    
+    <h1 align="center"> Profiles viewed by you </h1> <hr/>
+    
+    <table align="center">
+    
+      {% for userProfile in viewed_by_you.all %}
+        <tr>
+            <td> <img src="/static/user_image/{{userProfile.whose.user.username}}.JPG" width="60" height="60"/> </td>
+            <td> <a href="/social/main/{{userProfile.whose.user.username}}/" > 
+                {{ userProfile.whose.user.first_name }} &nbsp; {{ userProfile.whose.user.last_name }} </a> </td>
+            <td> {{ userProfile.whose.age }} </td>
+            <td> {{ userProfile.datetime }} </td>
+        </tr>
+      {% endfor %}
+      
+    </table>
+    {{who_has_viewed}}
+  </div>
+  <div style="height:50px;">
+
+  </div>
+{% endblock %}

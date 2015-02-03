@@ -1,0 +1,94 @@
+{% extends 'social/home.html' %}
+
+{% block title %} {{block.super}} - Home {% endblock %}
+
+{% block userimage %} 
+  <img src="/static/user_image/{{request.session.name}}.JPG" alt="My image" width=180 height=160 />
+{% endblock %}
+
+
+{% block right_content %}
+  
+  <div style="height: 100%; width: 700px; border: 2px solid; border-radius: 35px; box-shadow: 15px 15px 10px #888888; margin-top: -678px; 
+  margin-left: 210px;">
+    <h1 align="center"> User profile </h1> <hr/>
+
+    <table cellpadding="10px" align="center" style="color:black ;">
+	<tr>
+	  <td> <img src="/static/{{user.image}}"/> </td>
+	</tr>
+
+        <tr>
+	  <td> Name: </td>
+	  <td> {{user.username.user.first_name}} &nbsp;&nbsp; {{user.username.user.last_name}}  </td>
+        </tr> 
+
+	<tr>
+	  <td> Age: </td>
+	  <td> {{user.username.age}} </td>
+	</tr>
+
+	<tr>
+	  <td> Gender: </td>
+	  <td> {{user.gender}}</td>
+	</tr>
+
+	<tr>
+	  <td> Highest qualification: </td>
+	  <td> {{user.qualification}} </td>
+	</tr>
+
+	<tr>
+	  <td> Marital status: </td>
+	  <td> {{user.mstatus}} </td>
+	</tr>
+
+	<tr>
+	  <td> User ID: </td>
+	  <td> {{user.username.user.username}} </td>
+	</tr>
+
+	<tr>
+	  <td> Email ID: </td>
+	  <td> {{user.email}}</td>
+	</tr>
+
+	<tr>
+	  <td> Mobile Number: </td>
+	  <td> {{user.mobile}} </td>
+	</tr>
+
+	<tr>
+	  <td> Zip Code: </td>
+	  <td> {{user.zipcode}}</td>
+	</tr>
+
+	<tr>
+	  <td> City: </td>
+	  <td> {{user.city}} </td>
+	</tr>
+
+	<tr>
+	  <td> State: </td>
+	  <td> {{user.state}} </td>
+	</tr>
+
+	<tr>
+	  <td> Country: </td>
+	  <td> {{user.country}} </td>
+	</tr>
+
+	<tr>
+	  <td> About: </td>
+	  <td> {{user.about}} </td>
+	</tr>
+
+    </table>
+    
+  </div>
+  <div style="height:50px;">
+
+  </div>
+{% endblock %}
+
+

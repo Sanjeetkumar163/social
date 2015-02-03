@@ -1,0 +1,48 @@
+
+    <form method="post" action="/social/forgot-password/">
+      {% csrf_token %}
+      <table align="center"> 
+        <tr>
+          <td> User name: </td>
+          <td> <input type="text" name="u_name" placeholder=" Enter your User Name:" value={{empty.u_name}}></input> 
+            {% if empty and not empty.u_name %}
+    		  <lable> (User name is required) </lable>
+  	        {% endif %}
+	        {% if not_user == 0 %}
+		        <lable> (This User name does not exist) </lable>
+	        {% endif %}          
+          </td>
+        </tr>
+         <tr>
+          <td> New password: </td>
+          <td> <input type="password" name="u_password" /> 
+	        {% if empty and not empty.u_password %}
+    		    <lable>(Password is required) </lable>
+  	        {% endif %}
+          </td>
+        </tr>
+	    {% if wrong_pass == 1 %}
+	    <tr>
+	      <td> </td>
+	      <td> 
+	        <lable style="color: green;">(Password and Confirm password are not same) </lable>   
+	      </td>	
+	   </tr>
+	   {% endif %}
+        <tr>
+          <td> Confirm new password: </td>
+          <td> <input type="password" name="c_password" /> 
+	        {% if empty and not empty.c_password %}
+    		    <lable>(Confirm password is required) </lable>
+  	        {% endif %}          
+          </td>
+        </tr>  
+	    <tr>
+	      <td>  </td>
+	      <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="submit" value="Change password" />
+	    </tr>
+      
+      </table>
+    </form>
+
+

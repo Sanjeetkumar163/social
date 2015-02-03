@@ -1,0 +1,50 @@
+
+#user {
+	font-size: 20px;
+	background-color: white;
+	color: red;
+	text-align: center;
+}
+
+#navigation {
+	background-color: #00FFFF; 
+	text-align: center; 
+	font-size: 25px; 
+	border: 2px solid;			
+	border-radius: 15px;
+	box-shadow: 10px 10px 5px #888888;
+	width: 200px;
+}
+
+a:link {
+	text-decoration: none;
+}
+
+#navigation:hover {
+       background: radial-gradient(circle, white, green); 
+       text-shadow: 5px 5px 5px #FF0000;
+       
+}
+
+#userimage {
+	border: 2px solid blue; 
+	padding: 10px 10px 10px 8px; 
+	background-color: white;
+}
+
+#leftside {
+	background-color: #D0D0D0 ; 
+	height: 100%; 
+	width: 200px; 
+	margin-top: 27px;
+}
+
+#searchbox {
+	margin-top:-70px ; 
+	margin-left: 500px;
+}
+
+#sb {
+	margin-top:-30px;
+	margin-left: 328px;
+}

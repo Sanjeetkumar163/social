@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - Login {% endblock %}
+
+{% block left_content %}
+    <img src="/static/image/url.jpg" width=600 height=500/> 
+{% endblock %}
+
+{% block right_content %}
+  <div >
+
+    <form method="post" action="/friend/user-login/" >
+      {% csrf_token %}
+
+      <table style="padding: 0px 0px 0px 650px; margin-top: -460px; font-size:13px; color: red;">
+        <tr>
+	  <td> User ID: </td>
+	  <td> Password: </td>
+	</tr>
+        <tr>
+	  <td> <input type="text" name="userid" value="" /> </td>
+	  <td> <input type="password" name="password" value="" /> </td>
+	  <td> <input type="submit" value=" Log In " /> </td>
+	</tr>
+      </table>
+      
+    </form>
+
+    <table style="padding: 0px 0px 0px 650px;">
+      <tr>
+        <td> <a href="#">  <img src="/static/image/forgotpassword.gif" width=200 height=180 /> </a></td>
+   
+    	<td> <a href="/friend/signup/" > <img src="/static/image/signup.jpg" width=220 height=200 /> </a> </td>
+      </tr>
+    </table>
+
+  </div>
+{% endblock %}
+
+

@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %} {{block.super}} - User information {% endblock %}
+
+{% block head %}
+  <style>
+   lable {
+	color: green;
+   }
+  </style>
+{% endblock %}
+
+{% block left_content %}
+     
+{% endblock %}
+
+{% block right_content %}
+
+  <div style="padding: 0px 0px 0px 50px; margin-top: 20px; ">
+    <h1 style="font-size: 40px;"> Personal Information </h1> 
+    
+    <form {% if request.session.loggedinuser %} action="/social/edit/" {% else %} action="/social/user-data/" {% endif %}method="post" 
+      enctype="multipart/form-data" >
+      {% csrf_token %}
+
+      <table style="color: blue;">
+
+	<tr>
+	  <td> Gender: </td>
+	  <td> <input type="radio" name="gender" value="male" {% ifequal empty.gender "male" %} checked {% endifequal %} /> 
+	        Male &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	   <input type="radio" name="gender" value="female" {% ifequal empty.gender  "female" %} checked {% endifequal %} /> Female 
+	      {% if empty and not empty.gender %}
+    		<lable>(Gender is required) </lable>
+  	      {% endif %}
+	
+	  </td>
+	</tr>
+
+	<tr>
+	  <td> Highest qualification: </td>
+	  <td> <input type="text" name="qualification" value={{empty.qulification}} > </input> </td>
+	</tr>
+
+	<tr>
+	  <td> Mobile Number: </td>
+	  <td> <input type="number" name="mobile" value={{empty.mobile}} > </input> 
+	      {% if empty and not empty.mobile %}
+    		<lable>(Mobile Number is required) </lable>
+  	      {% endif %}
+
+	  </td>
+	</tr>
+
+	<tr>
+	  <td> Zip Code: </td>
+	  <td> <input type="text" name="zipcode" value={{empty.zipcode}} > </input> 
+	      {% if empty and not empty.zipcode %}
+    		<lable>(zip code is required) </lable>
+  	      {% endif %}
+
+	  </td>
+	</tr>
+
+	<tr>
+	  <td> City: </td>
+	  <td> <input type="text" name="city" value={{empty.city}} > </input> </td>
+	</tr>
+
+	<tr>
+	  <td> State: </td>
+	  <td> <input type="text" name="state" value={{empty.state}} > </input> </td>
+	</tr>
+
+	<tr>
+	  <td> Country: </td>
+	  <td> <input type="text" name="country" value={{empty.country}} > </input> </td>
+	</tr>
+
+	<tr>
+	  <td> About yourself: </td>
+	  <td> <textarea name="about" rows="10" cols="50" > {{empty.about}} </textarea> </td>
+	</tr>
+
+	<tr>
+	  <td> Marital status: </td>
+	  <td> <input type="radio" name="mstatus" value="married" {% ifequal empty.mstatus "married" %} checked {% endifequal %} />
+	        Married &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	       <input type="radio" name="mstatus" value="unmarried" {% ifequal empty.mstatus "unmarried" %} checked {% endifequal %} /> Unmarried 
+	      {% if empty and not empty.mstatus %}
+    		<lable>(Marital status is required) </lable>
+  	      {% endif %}
+	  </td>
+	</tr>
+	
+	<tr>
+	  <td> Upload Image: </td>
+	  <td> <input type="file" name="uimage" value={{empty.umage}} /> 
+	      {% if empty and not empty.image %}
+    		<lable>(This is Required Field) </lable>
+  	      {% endif %}
+	  </td>
+	</tr>
+	
+	<tr>
+	  <td>  </td>
+	  <td> <input type="submit" value=" Submit " /> </td>
+	</tr>
+
+      </table>
+
+    </form>
+{{ empty }}
+  </div>
+{% endblock %}
+
+
