@@ -106,6 +106,7 @@ def sign_up(request):
     return render(request, 'social/signup.html', cxt)
  
 
+@login_required(login_url='/social/')
 def user_data(request):
     empty={}
     if request.method == 'POST':
@@ -225,6 +226,7 @@ def viewed_by_you(request, username):
     return cxt
 
 
+@login_required(login_url='/social/')
 def main(request, username):
     if unicode(request.user) == username:
         a = about(request, username)
